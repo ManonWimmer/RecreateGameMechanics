@@ -26,8 +26,7 @@ public class InteractableObject : MonoBehaviour
     {
         // Turn object name and arrow towards camera :
         _canvas.transform.LookAt(Camera.main.transform);
-
-        
+        // To do : compenser le rotate y avec le rotate z pour que le texte soit toujours bien droit
     }
 
     // ----- Enable / Disable Outline ----- //

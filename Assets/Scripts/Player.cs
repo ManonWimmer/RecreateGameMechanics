@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     // ----- FIELDS -----//
+    [SerializeField] LayerMask _interactableLayer;
     private InteractableObject _currentObjectOutlined;
     private bool _isOutlined = false;
     // ----- FIELDS -----//
@@ -14,10 +15,8 @@ public class Player : MonoBehaviour
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        int objectLayer = LayerMask.GetMask("Object");
 
-
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, objectLayer))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer))
         {
             Debug.Log("hit :" + hit.collider.name);
             
