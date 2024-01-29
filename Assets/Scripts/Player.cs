@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer))
         {
+            Debug.DrawLine(transform.position, hit.point, Color.blue);
             Debug.Log("hit :" + hit.collider.name);
             
             if (hit.collider.TryGetComponent<InteractableObject>(out InteractableObject _object))
