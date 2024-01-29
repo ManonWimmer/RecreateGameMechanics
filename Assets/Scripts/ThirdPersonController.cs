@@ -9,6 +9,9 @@ public class ThirdPersonController : MonoBehaviour
     [SerializeField] float _moveSpeed = 5f;
     [SerializeField] Transform _orientation;
     [SerializeField] float _groundDrag;
+    [SerializeField] Animator _animator;
+
+    private bool _isWalking;
 
     private float _horizontalInput;
     private float _verticalInput;
@@ -50,6 +53,19 @@ public class ThirdPersonController : MonoBehaviour
     {
         // Calculate Movement Direction
         _moveDirection = _orientation.forward * _verticalInput + _orientation.right * _horizontalInput;
+
+        if (_moveDirection == Vector3.zero && _isWalking)
+        {
+            Debug.Log("is walking false");
+            _isWalking = false;
+            _animator.SetBool("isWalking", false);
+        }
+        else if (_moveDirection != Vector3.zero && !_isWalking)
+        {
+            Debug.Log("is walking true");
+            _isWalking = true;
+            _animator.SetBool("isWalking", true);
+        }
 
         _rb.AddForce(_moveDirection * _moveSpeed * 10f, ForceMode.Force);
     }
