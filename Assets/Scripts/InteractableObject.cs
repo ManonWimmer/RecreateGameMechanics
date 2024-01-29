@@ -20,12 +20,18 @@ public class InteractableObject : MonoBehaviour
 
         DisableOutline();
         // ----- Init Outline ----- //
+
+        // Hide text and arrow
+        DisableCanvas();
     }
 
     void Update()
     {
         // Turn object name and arrow towards camera :
-        _canvas.transform.LookAt(Camera.main.transform);
+        if (_canvas.enabled)
+        {
+            _canvas.transform.LookAt(Camera.main.transform);
+        }
         // To do : compenser le rotate y avec le rotate z pour que le texte soit toujours bien droit
     }
 
@@ -38,6 +44,18 @@ public class InteractableObject : MonoBehaviour
     public void DisableOutline()
     {
         _outline.enabled = false;
+    }
+    // ----- Enable / Disable Outline ----- //
+
+    // ----- Enable / Disable Outline ----- //
+    public void EnableCanvas()
+    {
+        _canvas.enabled = true;
+    }
+
+    public void DisableCanvas()
+    {
+        _canvas.enabled = false;
     }
     // ----- Enable / Disable Outline ----- //
 }
