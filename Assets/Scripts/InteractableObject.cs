@@ -7,6 +7,7 @@ public class InteractableObject : MonoBehaviour
     // ----- FIELDS ----- //
     [SerializeField] Canvas _canvas;
     private Outline _outline;
+    private bool _isPlayerInTrigger;
     // ----- FIELDS ----- //
 
     void Start()
@@ -58,4 +59,19 @@ public class InteractableObject : MonoBehaviour
         _canvas.enabled = false;
     }
     // ----- Enable / Disable Outline ----- //
+
+    public void PlayerInTrigger()
+    {
+        _isPlayerInTrigger = true;
+    }
+
+    public void PlayerNotInTrigger()
+    {
+        _isPlayerInTrigger = false;
+    }
+
+    public bool IsPlayerInTrigger()
+    {
+        return _isPlayerInTrigger;
+    }
 }

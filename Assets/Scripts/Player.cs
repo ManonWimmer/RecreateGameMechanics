@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.PackageManager;
+using UnityEditor.ShaderGraph.Drawing;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -23,23 +24,35 @@ public class Player : MonoBehaviour
             
             if (hit.collider.TryGetComponent<InteractableObject>(out InteractableObject _object))
             {
-                if (_currentObjectOutlined != null)
+                if (_object.IsPlayerInTrigger()) // Player in trigger
                 {
-                    if (_currentObjectOutlined != _object) // Change current object
+                    if (_currentObjectOutlined != null)
                     {
-                        _currentObjectOutlined.DisableOutline();
+                        if (_currentObjectOutlined != _object) // Change current object
+                        {
+                            _currentObjectOutlined.DisableOutline();
+                            _currentObjectOutlined = _object;
+                            _object.EnableOutline();
+                        }
+                        // Else -> same object hit, we change nothing (already outlined)
+                    }
+                    else // New object
+                    {
                         _currentObjectOutlined = _object;
                         _object.EnableOutline();
                     }
-                    // Else -> same object hit, we change nothing (already outlined)
-                }
-                else // New object
-                {
-                    _currentObjectOutlined = _object;
-                    _object.EnableOutline();
-                }
 
-                _isOutlined = true;
+                    _isOutlined = true;
+                } 
+                else // Player not in trigger 
+                {
+                    if (_isOutlined)
+                    {
+                        _currentObjectOutlined.DisableOutline();
+                        _currentObjectOutlined = null;
+                        _isOutlined = false;
+                    }
+                }
             }
         }
         else // No hit

@@ -6,6 +6,7 @@ public class ObjectTrigger : MonoBehaviour
 {
     // ----- FIELDS ----- //
     private InteractableObject _object;
+    // ----- FIELDS ----- //
 
     private void Start()
     {
@@ -14,11 +15,13 @@ public class ObjectTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        _object.PlayerInTrigger();
         _object.EnableCanvas();
     }
 
     private void OnTriggerExit(Collider other)
     {
+        _object.PlayerNotInTrigger();
         _object.DisableCanvas();
     }
 }
