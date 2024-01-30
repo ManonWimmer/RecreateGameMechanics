@@ -19,8 +19,6 @@ public class ThirdPersonController : MonoBehaviour
     private Vector3 _moveDirection;
 
     private Rigidbody _rb;
-
-
     // ----- FIELDS ----- //
 
     private void Start()

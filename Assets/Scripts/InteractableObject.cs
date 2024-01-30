@@ -60,6 +60,7 @@ public class InteractableObject : MonoBehaviour
     }
     // ----- Enable / Disable Outline ----- //
 
+    // ----- Player - Object Trigger ----- //
     public void PlayerInTrigger()
     {
         _isPlayerInTrigger = true;
@@ -74,4 +75,5 @@ public class InteractableObject : MonoBehaviour
     {
         return _isPlayerInTrigger;
     }
+    // ----- Player - Object Trigger ----- //
 }
