@@ -19,8 +19,16 @@ public class TextMove : MonoBehaviour
 
     private void Start()
     {
-        _textOffsetX = UIManager.instance.TextOffsetX;
-        _textOffsetY = UIManager.instance.TextOffsetY;
+        if (gameObject.layer == 5) // UI
+        {
+            _textOffsetX = UIManager.instance.TextOffsetX * 10f;
+            _textOffsetY = UIManager.instance.TextOffsetY * 10f;
+        }
+        else // Not UI
+        {
+            _textOffsetX = UIManager.instance.TextOffsetX;
+            _textOffsetY = UIManager.instance.TextOffsetY;
+        }   
 
         _textOffsetTime1 = UIManager.instance.TextOffsetTime1;
         _textOffsetTime2 = UIManager.instance.TextOffsetTime2;
@@ -28,7 +36,7 @@ public class TextMove : MonoBehaviour
 
         _rect = transform.GetComponent<RectTransform>();
 
-        _startPosition = _rect.position;
+        _startPosition = _rect.localPosition;
     }
 
     private void OnEnable()
@@ -47,13 +55,13 @@ public class TextMove : MonoBehaviour
     private IEnumerator TextOffset()
     {
         yield return new WaitForSeconds(_textOffsetTime1 + Random.Range(0, 0.5f));
-        _rect.position = new Vector3(_startPosition.x + _textOffsetX, _startPosition.y, _startPosition.z);
+        _rect.localPosition = new Vector3(_startPosition.x + _textOffsetX, _startPosition.y, _startPosition.z);
 
         yield return new WaitForSeconds(_textOffsetTime2 + Random.Range(0, 0.5f));
-        _rect.position = new Vector3(_startPosition.x + _textOffsetX / 2, _startPosition.y + _textOffsetY, _startPosition.z);
+        _rect.localPosition = new Vector3(_startPosition.x + _textOffsetX / 2, _startPosition.y + _textOffsetY, _startPosition.z);
 
         yield return new WaitForSeconds(_textOffsetTime3 + Random.Range(0, 0.5f));
-        _rect.position = new Vector3(_startPosition.x, _startPosition.y, _startPosition.z);
+        _rect.localPosition = new Vector3(_startPosition.x, _startPosition.y, _startPosition.z);
 
         yield return StartCoroutine(TextOffset());
     }

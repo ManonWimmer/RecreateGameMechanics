@@ -5,7 +5,8 @@ using UnityEngine;
 public class InteractableObject : MonoBehaviour
 {
     // ----- FIELDS ----- //
-    [SerializeField] Canvas _canvas;
+    [SerializeField] ObjectCanvasUI _canvas;
+
     private Outline _outline;
     private bool _isPlayerInTrigger;
     // ----- FIELDS ----- //
@@ -26,15 +27,6 @@ public class InteractableObject : MonoBehaviour
         DisableCanvas();
     }
 
-    void Update()
-    {
-        // Turn object name and arrow towards camera :
-        if (_canvas.enabled)
-        {
-            _canvas.transform.LookAt(Camera.main.transform);
-        }
-        // To do : compenser le rotate y avec le rotate z pour que le texte soit toujours bien droit
-    }
 
     // ----- Enable / Disable Outline ----- //
     public void EnableOutline()
@@ -48,30 +40,35 @@ public class InteractableObject : MonoBehaviour
     }
     // ----- Enable / Disable Outline ----- //
 
-    // ----- Enable / Disable Outline ----- //
-    public void EnableCanvas()
+    // ----- Enable / Disable Canvas ----- //
+    public void EnableCanvasName()
     {
-        _canvas.enabled = true;
+        _canvas.EnableCanvasName();
+    }
+
+    public void EnableCanvasActions()
+    {
+        _canvas.EnableCanvasActions();
     }
 
     public void DisableCanvas()
     {
-        _canvas.enabled = false;
+        _canvas.DisableCanvas();
     }
-    // ----- Enable / Disable Outline ----- //
+    // ----- Enable / Disable Canvas ----- //
 
     // ----- Player - Object Trigger ----- //
-    public void PlayerInTrigger()
+    public void PlayerInTriggerSmall()
     {
         _isPlayerInTrigger = true;
     }
 
-    public void PlayerNotInTrigger()
+    public void PlayerNotInTriggerSmall()
     {
         _isPlayerInTrigger = false;
     }
 
-    public bool IsPlayerInTrigger()
+    public bool IsPlayerInTriggerSmall()
     {
         return _isPlayerInTrigger;
     }

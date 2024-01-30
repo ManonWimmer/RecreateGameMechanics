@@ -20,11 +20,11 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer))
         {
             //Debug.DrawLine(transform.position, hit.point, Color.blue);
-            Debug.Log("hit :" + hit.collider.name);
+            //Debug.Log("hit :" + hit.collider.name);
             
             if (hit.collider.TryGetComponent<InteractableObject>(out InteractableObject _object))
             {
-                if (_object.IsPlayerInTrigger()) // Player in trigger
+                if (_object.IsPlayerInTriggerSmall()) // Player in trigger -> can outline
                 {
                     if (_currentObjectOutlined != null)
                     {
@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
 
                     _isOutlined = true;
                 } 
-                else // Player not in trigger 
+                else // Player not in trigger -> can't outline
                 {
                     if (_isOutlined)
                     {

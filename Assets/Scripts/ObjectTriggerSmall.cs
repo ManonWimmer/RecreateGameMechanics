@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectTrigger : MonoBehaviour
+public class ObjectTriggerSmall : MonoBehaviour
 {
     // ----- FIELDS ----- //
     private InteractableObject _object;
@@ -15,14 +15,14 @@ public class ObjectTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        _object.PlayerInTrigger();
-        _object.EnableCanvas();
+        _object.EnableCanvasActions();
+        _object.PlayerInTriggerSmall();
     }
 
     private void OnTriggerExit(Collider other)
     {
-        _object.PlayerNotInTrigger();
-        _object.DisableCanvas();
+        _object.PlayerNotInTriggerSmall();
+        _object.EnableCanvasName();
     }
 }
 
