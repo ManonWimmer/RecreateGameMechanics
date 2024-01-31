@@ -1,14 +1,32 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public enum Button
+{
+    South, North, West, East
+}
+
 public class InteractableObject : MonoBehaviour
 {
     // ----- FIELDS ----- //
+    [System.Serializable]
+    public class ButtonData
+    {
+        public Button ButtonName;
+        public String ActionName;
+    }
+
     [SerializeField] ObjectCanvasUI _canvas;
 
+    [SerializeField] List<ButtonData> _buttonsData = new List<ButtonData>();
+    
     private Outline _outline;
     private bool _isPlayerInTrigger;
+
+    public List<ButtonData> ButtonsData { get => _buttonsData; set => _buttonsData = value; }
     // ----- FIELDS ----- //
 
     void Start()

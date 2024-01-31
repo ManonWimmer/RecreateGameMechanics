@@ -790,6 +790,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 570241250}
+  _buttonsData: []
 --- !u!4 &225757095 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3923764092858843911, guid: e0dc3cb5a57d55c4fa0fea22ce1aca2e,
@@ -1948,8 +1949,8 @@ RectTransform:
   m_Children:
   - {fileID: 2045998085}
   - {fileID: 190232888}
-  - {fileID: 553227888}
   - {fileID: 1078978705}
+  - {fileID: 553227888}
   m_Father: {fileID: 540205596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -2041,6 +2042,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvas: {fileID: 540205597}
+  _buttonsData:
+  - ButtonName: 0
+    ActionName: Use
 --- !u!4 &536848223 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7486564517297639117, guid: 44f1bb19a9a93684ca9ad7e35b042223,
@@ -2167,6 +2171,10 @@ MonoBehaviour:
   _canvas: {fileID: 540205593}
   _itemName: {fileID: 1568767333}
   _actions: {fileID: 506101556}
+  _buttonImg_South: {fileID: 2045998086}
+  _buttonImg_North: {fileID: 190232889}
+  _buttonImg_West: {fileID: 1078978706}
+  _buttonImg_East: {fileID: 553227889}
 --- !u!1 &552846216
 GameObject:
   m_ObjectHideFlags: 0
@@ -2480,7 +2488,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573514030}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.547847, y: -0.000000117630826, z: 0.00000007703244, w: 0.8365786}
+  m_LocalRotation: {x: 0.547847, y: -0.00000011763082, z: 0.00000007703244, w: 0.8365786}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
