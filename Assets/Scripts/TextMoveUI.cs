@@ -54,13 +54,13 @@ public class TextMove : MonoBehaviour
 
     private IEnumerator TextOffset()
     {
-        yield return new WaitForSeconds(_textOffsetTime1 + Random.Range(0, 0.5f));
+        yield return new WaitForSeconds(_textOffsetTime1);
         _rect.localPosition = new Vector3(_startPosition.x + _textOffsetX, _startPosition.y, _startPosition.z);
 
-        yield return new WaitForSeconds(_textOffsetTime2 + Random.Range(0, 0.5f));
+        yield return new WaitForSeconds(_textOffsetTime2);
         _rect.localPosition = new Vector3(_startPosition.x + _textOffsetX / 2, _startPosition.y + _textOffsetY, _startPosition.z);
 
-        yield return new WaitForSeconds(_textOffsetTime3 + Random.Range(0, 0.5f));
+        yield return new WaitForSeconds(_textOffsetTime3);
         _rect.localPosition = new Vector3(_startPosition.x, _startPosition.y, _startPosition.z);
 
         yield return StartCoroutine(TextOffset());

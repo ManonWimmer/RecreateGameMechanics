@@ -34,6 +34,19 @@ public class ThirdPersonController : MonoBehaviour
         SpeedControl();
 
         _rb.drag = _groundDrag;
+
+        if (!UIManager.instance.IsInMenu)
+        {
+            // Lock & Hide Cursor
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            // Delock & Show Cursor
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
     }
 
     private void FixedUpdate()
@@ -51,6 +64,11 @@ public class ThirdPersonController : MonoBehaviour
     {
         // Calculate Movement Direction
         _moveDirection = _orientation.forward * _verticalInput + _orientation.right * _horizontalInput;
+
+        if (UIManager.instance.IsInMenu)
+        {
+            _moveDirection = Vector3.zero;
+        }
 
         if (_moveDirection == Vector3.zero && _isWalking)
         {

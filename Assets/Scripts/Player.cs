@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEditor.ShaderGraph.Drawing;
 using UnityEngine;
+using static InteractableObject;
 
 public class Player : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class Player : MonoBehaviour
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer))
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer) && !UIManager.instance.IsInMenu)
         {
             //Debug.DrawLine(transform.position, hit.point, Color.blue);
             //Debug.Log("hit :" + hit.collider.name);
@@ -41,8 +42,25 @@ public class Player : MonoBehaviour
                         _currentObjectOutlined = _object;
                         _object.EnableOutline();
                     }
-
                     _isOutlined = true;
+
+                    // Inputs
+                    if (_currentObjectOutlined.ButtonsData.Count > 0)
+                    {
+                        foreach (var b in _currentObjectOutlined.ButtonsData)
+                        {
+                            switch (b.ButtonName)
+                            {
+                                case Button.North:
+                                    if (Input.GetKeyDown(KeyCode.Space))
+                                    { // Mettre cette condition if raycast dans player
+                                        ObjectInspector.instance.InspectObject(_currentObjectOutlined.Prefab);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+
                 } 
                 else // Player not in trigger -> can't outline
                 {

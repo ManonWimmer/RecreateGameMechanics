@@ -19,14 +19,18 @@ public class InteractableObject : MonoBehaviour
         public String ActionName;
     }
 
+    [SerializeField] Transform _prefab;
+
     [SerializeField] ObjectCanvasUI _canvas;
 
-    [SerializeField] List<ButtonData> _buttonsData = new List<ButtonData>();
+    [SerializeField] List<ButtonData> _buttonsData = new List<ButtonData>(); // Custom buttons
     
     private Outline _outline;
-    private bool _isPlayerInTrigger;
+    private bool _isPlayerInTriggerSmall;
 
     public List<ButtonData> ButtonsData { get => _buttonsData; set => _buttonsData = value; }
+    public Transform Prefab { get => _prefab; set => _prefab = value; }
+
     // ----- FIELDS ----- //
 
     void Start()
@@ -44,7 +48,6 @@ public class InteractableObject : MonoBehaviour
         // Hide text and arrow
         DisableCanvas();
     }
-
 
     // ----- Enable / Disable Outline ----- //
     public void EnableOutline()
@@ -78,17 +81,17 @@ public class InteractableObject : MonoBehaviour
     // ----- Player - Object Trigger ----- //
     public void PlayerInTriggerSmall()
     {
-        _isPlayerInTrigger = true;
+        _isPlayerInTriggerSmall = true;
     }
 
     public void PlayerNotInTriggerSmall()
     {
-        _isPlayerInTrigger = false;
+        _isPlayerInTriggerSmall = false;
     }
 
     public bool IsPlayerInTriggerSmall()
     {
-        return _isPlayerInTrigger;
+        return _isPlayerInTriggerSmall;
     }
     // ----- Player - Object Trigger ----- //
 }
