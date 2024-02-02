@@ -33,6 +33,15 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        _isInMenu = ObjectInspector.instance.IsInObjectInspectorMenu ? true : false;
+        if (_isInMenu && !ObjectInspectorManager.instance.IsInObjectInspectorMenu)
+        {
+            _isInMenu = false;
+            CursorManagerUI.instance.ShowCursorUI();
+        }
+        else if (!_isInMenu && ObjectInspectorManager.instance.IsInObjectInspectorMenu)
+        {
+            _isInMenu = true;
+            CursorManagerUI.instance.HideCursorUI();
+        }
     }
 }

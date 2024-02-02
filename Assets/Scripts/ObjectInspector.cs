@@ -13,9 +13,6 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
     [SerializeField] RenderTexture _renderTexture;
 
     private Transform _objectPrefab;
-
-    private bool _isInObjectInspectorMenu;
-    public bool IsInObjectInspectorMenu { get => _isInObjectInspectorMenu; set => _isInObjectInspectorMenu = value; }
     // ----- FIELDS ----- //
 
     private void Awake()
@@ -26,13 +23,12 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
     private void Start()
     {
         _rawImage = GetComponentInChildren<RawImage>();
-        HideObjectInspector();
         ClearOutRenderTexture(_renderTexture);
     }
 
     public void InspectObject(Transform prefab)
     {
-        ShowObjectInspector();
+        ObjectInspectorManager.instance.ShowObjectInspector();
         
         if (_objectPrefab != null)
         {
@@ -40,20 +36,6 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
         }
 
         _objectPrefab = Instantiate(prefab, new Vector3(1000, 1000, 1000), Quaternion.identity);
-    }
-
-    private void ShowObjectInspector()
-    {
-        _rawImage.enabled = true;
-        _rawImage.transform.parent.gameObject.GetComponent<Image>().enabled = true; // background
-        _isInObjectInspectorMenu = true;
-    }
-
-    private void HideObjectInspector()
-    {
-        _rawImage.enabled = false;
-        _rawImage.transform.parent.gameObject.GetComponent<Image>().enabled = false; // background
-        _isInObjectInspectorMenu = false;
     }
 
     public void OnDrag(PointerEventData eventData)
