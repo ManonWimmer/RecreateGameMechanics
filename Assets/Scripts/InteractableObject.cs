@@ -9,6 +9,12 @@ public enum Button
     South, North, West, East
 }
 
+[Serializable]
+public enum ObjectInspectorType
+{
+    ThreeDimension, TwoDimension, TargetCamera
+}
+
 public class InteractableObject : MonoBehaviour
 {
     // ----- FIELDS ----- //
@@ -19,7 +25,11 @@ public class InteractableObject : MonoBehaviour
         public String ActionName;
     }
 
-    [SerializeField] Transform _prefab;
+    [SerializeField] ObjectInspectorType _objectInspectorType;
+
+    [SerializeField] Transform _prefab; // For 3D inspection
+    [SerializeField] Sprite _objectSprite; // For 2D inspection
+    [SerializeField] String _objectReadText; // Can be read ? string null or not
 
     [SerializeField] ObjectCanvasUI _canvas;
 
@@ -30,6 +40,9 @@ public class InteractableObject : MonoBehaviour
 
     public List<ButtonData> ButtonsData { get => _buttonsData; set => _buttonsData = value; }
     public Transform Prefab { get => _prefab; set => _prefab = value; }
+    public Sprite ObjectSprite { get => _objectSprite; set => _objectSprite = value; }
+    public string ObjectReadText { get => _objectReadText; set => _objectReadText = value; }
+    public ObjectInspectorType ObjectInspectorType { get => _objectInspectorType; set => _objectInspectorType = value; }
 
     // ----- FIELDS ----- //
 

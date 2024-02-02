@@ -54,7 +54,11 @@ public class Player : MonoBehaviour
                                 case Button.North:
                                     if (Input.GetKeyDown(KeyCode.Space))
                                     { // Mettre cette condition if raycast dans player
-                                        ObjectInspector.instance.InspectObject(_currentObjectOutlined.Prefab);
+                                        if (_currentObjectOutlined.ObjectInspectorType != ObjectInspectorType.TargetCamera)
+                                        {
+                                            ObjectInspector.instance.InspectObject(_currentObjectOutlined.Prefab, _currentObjectOutlined); // 2D or 3D
+                                        }
+                                        // todo: else -> inspection target camera
                                     }
                                     break;
                             }
