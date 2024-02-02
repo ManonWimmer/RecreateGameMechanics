@@ -15,7 +15,8 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //-> Not working with gamepad
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)); // Center of the screen
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer) && !UIManager.instance.IsInMenu)
@@ -52,8 +53,8 @@ public class Player : MonoBehaviour
                             switch (b.ButtonName)
                             {
                                 case Button.North:
-                                    if (Input.GetKeyDown(KeyCode.Space))
-                                    { // Mettre cette condition if raycast dans player
+                                    if (InputManager.instance.GetNorthPressed())
+                                    { 
                                         if (_currentObjectOutlined.ObjectInspectorType != ObjectInspectorType.TargetCamera)
                                         {
                                             ObjectInspector.instance.InspectObject(_currentObjectOutlined.Prefab, _currentObjectOutlined); // 2D or 3D

@@ -40,6 +40,9 @@ public class ThirdPersonCamera : MonoBehaviour
             // Rotate Player Object
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
+
+            // Incompréhensible que ça marche pas avec InputManager.instance.GetMoveDirection().x et y mais tqt
+
             Vector3 inputDirection = _orientation.forward * verticalInput + _orientation.right * horizontalInput;
             Vector2 test = new Vector2(horizontalInput, verticalInput);
 
