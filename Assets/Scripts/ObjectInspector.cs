@@ -20,6 +20,7 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
     [SerializeField] TMP_Text _readTxt;
 
     private bool _canDrag;
+    private bool _canRead;
 
     private Transform _objectPrefab;
     // ----- FIELDS ----- //
@@ -34,6 +35,32 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
         ClearOutRenderTexture(_renderTexture);
     }
 
+    private void Update()
+    {
+        if (InputManager.instance.GetExitPressed())
+        {
+            ObjectInspectorManager.instance.HideObjectInspector();
+        }
+
+        if (InputManager.instance.GetSouthPressed() && _canRead)
+        {
+            ToggleReadPanel();
+        }
+
+        // For gamepad rotate if 3d
+        if (_canDrag && InputManager.instance.GetDevice() != "Keyboard")
+        {
+            if (Vector3.Dot(_objectPrefab.transform.up, Vector3.up) >= 0)
+            {
+                _objectPrefab.transform.eulerAngles += new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+            }
+            else
+            {
+                _objectPrefab.transform.eulerAngles += new Vector3(Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0);
+            }
+        }
+    }
+
     public void InspectObject(Transform prefab, InteractableObject currentObject)
     {
         ObjectInspectorManager.instance.ShowObjectInspector();
@@ -44,11 +71,12 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
         {
             _readBottomIcon.SetActive(true);
             _readTxt.text = currentObject.ObjectReadText;
-            ShowReadPanel();
+            _canRead = true;
         }
         else
         {
             _readBottomIcon.SetActive(false);
+            _canRead = false;
         }
 
         if (currentObject.ObjectInspectorType == ObjectInspectorType.ThreeDimension)
@@ -108,5 +136,10 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
     public void HideReadPanel()
     {
         _readPanel.SetActive(false);
+    }
+
+    public void ToggleReadPanel()
+    {
+        _readPanel.SetActive(!_readPanel.activeSelf);
     }
 }

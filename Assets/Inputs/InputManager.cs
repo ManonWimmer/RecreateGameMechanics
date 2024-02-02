@@ -142,4 +142,8 @@ public class InputManager : MonoBehaviour
         Debug.Log("controls changed");
         UpdateDevice();
     }
+    public string GetDevice()
+    {
+        return _deviceUsed;
+    }
 }
