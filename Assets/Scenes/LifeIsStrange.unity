@@ -931,12 +931,12 @@ PrefabInstance:
     - target: {fileID: 4617571445562816565, guid: 76052a95fd9dfd44aa1211fed928d714,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.34
+      value: 1.23
       objectReference: {fileID: 0}
     - target: {fileID: 4617571445562816565, guid: 76052a95fd9dfd44aa1211fed928d714,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.28
+      value: 1.82
       objectReference: {fileID: 0}
     - target: {fileID: 4617571445562816565, guid: 76052a95fd9dfd44aa1211fed928d714,
         type: 3}
@@ -6350,6 +6350,7 @@ MonoBehaviour:
   _interactableLayer:
     serializedVersion: 2
     m_Bits: 128
+  _sphereRaycastRadius: 0.5
 --- !u!114 &1506017843
 MonoBehaviour:
   m_ObjectHideFlags: 0

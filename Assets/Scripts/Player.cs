@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
 {
     // ----- FIELDS -----//
     [SerializeField] LayerMask _interactableLayer;
+    [SerializeField] float _sphereRaycastRadius = 0.5f;
     private InteractableObject _currentObjectOutlined;
     private bool _isOutlined = false;
     // ----- FIELDS -----//
@@ -16,10 +17,13 @@ public class Player : MonoBehaviour
     void Update()
     {
         //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //-> Not working with gamepad
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)); // Center of the screen
+
+        //Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)); // Center of the screen
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer) && !UIManager.instance.IsInMenu)
+        //if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer) && !UIManager.instance.IsInMenu)
+        if (!UIManager.instance.IsInMenu && Physics.SphereCast(ray, _sphereRaycastRadius, out hit, Mathf.Infinity, _interactableLayer))
         {
             //Debug.DrawLine(transform.position, hit.point, Color.blue);
             //Debug.Log("hit :" + hit.collider.name);
