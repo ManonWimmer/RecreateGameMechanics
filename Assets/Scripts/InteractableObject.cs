@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [Serializable]
 public enum Button
@@ -13,6 +14,35 @@ public enum Button
 public enum ObjectInspectorType
 {
     ThreeDimension, TwoDimension, TargetCamera
+}
+
+[Serializable]
+public class NewDictItem
+{
+    [SerializeField]
+    public int index;
+
+    [SerializeField]
+    public string text;
+}
+
+[Serializable]
+public class NewDict
+{
+    [SerializeField]
+    NewDictItem[] dictItems;
+
+    public Dictionary<int, string> ToDictionary()
+    {
+        Dictionary<int, string> newDict = new Dictionary<int, string>();
+
+        foreach(var item in dictItems)
+        {
+            newDict.Add(item.index, item.text);
+        }
+
+        return newDict;
+    }
 }
 
 public class InteractableObject : MonoBehaviour
@@ -29,7 +59,9 @@ public class InteractableObject : MonoBehaviour
 
     [SerializeField] Transform _prefab; // For 3D inspection
     [SerializeField] List<Sprite> _objectSprites = new List<Sprite>(); // For 2D inspection
-    [SerializeField] List<string> _objectReadTexts = new List<string>(); // Can be read ? List for multiple sprites // CHANGER POUR PAIR STRING, INT SPRITE
+
+    [SerializeField] NewDict _serializedDict;
+     private Dictionary<int, string> _readTextsDict = new Dictionary<int, string>(); // Can be read ? Dict, for each sprite index -> text
 
     [SerializeField] ObjectCanvasUI _canvas;
 
@@ -41,7 +73,7 @@ public class InteractableObject : MonoBehaviour
     public List<ButtonData> ButtonsData { get => _buttonsData; set => _buttonsData = value; }
     public Transform Prefab { get => _prefab; set => _prefab = value; }
     public List<Sprite> ObjectSprites { get => _objectSprites; set => _objectSprites = value; }
-    public List<string> ObjectReadTexts { get => _objectReadTexts; set => _objectReadTexts = value; }
+    public Dictionary<int, string> ReadTextsDict { get => _readTextsDict; set => _readTextsDict = value; }
     public ObjectInspectorType ObjectInspectorType { get => _objectInspectorType; set => _objectInspectorType = value; }
 
     // ----- FIELDS ----- //
@@ -60,6 +92,9 @@ public class InteractableObject : MonoBehaviour
 
         // Hide text and arrow
         DisableCanvas();
+
+        // Create dict
+        ReadTextsDict = _serializedDict.ToDictionary();
     }
 
     // ----- Enable / Disable Outline ----- //

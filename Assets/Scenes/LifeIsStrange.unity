@@ -1697,6 +1697,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
         type: 3}
+      propertyPath: _readTextItems.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
       propertyPath: _objectReadTexts.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1724,6 +1729,51 @@ PrefabInstance:
       value: 'bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
         bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla
         bla bla bla bla bla bla bla bla bla bla bla bla bla bla '
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _objectReadTexts.keys.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _objectReadTexts.values.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _objectReadTexts.keys.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _serializedDict.dictItems.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _objectReadTexts.values.Array.data[0]
+      value: text 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _objectReadTexts.values.Array.data[1]
+      value: text 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _serializedDict.dictItems.Array.data[0].text
+      value: text 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _serializedDict.dictItems.Array.data[1].text
+      value: text 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7042462993673150671, guid: 76052a95fd9dfd44aa1211fed928d714,
+        type: 3}
+      propertyPath: _serializedDict.dictItems.Array.data[1].index
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7277822196095736693, guid: 76052a95fd9dfd44aa1211fed928d714,
         type: 3}
@@ -3283,7 +3333,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 573514030}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.547847, y: 0.000000017807857, z: -0.000000011661764, w: 0.83657855}
+  m_LocalRotation: {x: 0.547847, y: 0.00000001780787, z: -0.00000001166178, w: 0.83657855}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

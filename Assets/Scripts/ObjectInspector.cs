@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
+using System.Xml;
 
 public class ObjectInspector : MonoBehaviour, IDragHandler
 {
@@ -70,6 +71,7 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
                         _currentInt++;
                         _image2D.sprite = _object.ObjectSprites[_currentInt];
                         CheckNextAndPrevious();
+                        CheckRead();
                     }
                 }
                 else if (nextOrPreviousDirection.x == -1) // Previous
@@ -79,6 +81,7 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
                         _currentInt--;
                         _image2D.sprite = _object.ObjectSprites[_currentInt];
                         CheckNextAndPrevious();
+                        CheckRead();
                     }
                 }
             }
@@ -110,17 +113,7 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
         _canGoNext = false;
         _canGoPrevious = false;
 
-        if (currentObject.ObjectReadTexts.Count > 0)
-        {
-            _readBottomIcon.SetActive(true);
-            _readTxt.text = currentObject.ObjectReadTexts[_currentInt]; // _currentInt = 0
-            _canRead = true;
-        }
-        else
-        {
-            _readBottomIcon.SetActive(false);
-            _canRead = false;
-        }
+        CheckRead();
 
         if (currentObject.ObjectInspectorType == ObjectInspectorType.ThreeDimension)
         {
@@ -143,6 +136,7 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
             _canDrag = false;
 
             CheckNextAndPrevious();
+            CheckRead();
         }
     }
 
@@ -186,6 +180,22 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
     public void ToggleReadPanel()
     {
         _readPanel.SetActive(!_readPanel.activeSelf);
+    }
+
+    private void CheckRead()
+    {
+        Debug.Log($"Count : {_object.ReadTextsDict.Count}, current int : {_currentInt}, contains key : {_object.ReadTextsDict.ContainsKey(_currentInt)}");
+        if (_object.ReadTextsDict.Count > 0 && _object.ReadTextsDict.ContainsKey(_currentInt))
+        {
+            _readBottomIcon.SetActive(true);
+            _readTxt.text = _object.ReadTextsDict[_currentInt]; 
+            _canRead = true;
+        }
+        else
+        {
+            _readBottomIcon.SetActive(false);
+            _canRead = false;
+        }
     }
 
     private void CheckNextAndPrevious()
