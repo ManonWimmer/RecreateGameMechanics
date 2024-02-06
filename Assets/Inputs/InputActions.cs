@@ -80,6 +80,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""NextOrPrevious"",
+                    ""type"": ""Value"",
+                    ""id"": ""926d328e-473a-450c-9e88-d834e2068c51"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -324,6 +333,83 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Exit"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Keyboard Arrows"",
+                    ""id"": ""a9cbadcd-ecf8-42e8-b1f7-a72cd3a26d68"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextOrPrevious"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""3c46d748-b8cc-47d3-86b0-28dc2098c14d"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextOrPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""bc4ef6ee-e775-4daa-8858-d0b4fd781e97"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextOrPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""03adf3a7-6cd4-496a-bbef-9038535733cc"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextOrPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""545a8009-f894-4d3f-9524-b77de0db5042"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextOrPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a50aa72c-6ccf-4b06-8872-95200bd45237"",
+                    ""path"": ""<XInputController>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""ControllerXBOX"",
+                    ""action"": ""NextOrPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7b8360c2-7333-4ed5-aa94-925a0fee2a08"",
+                    ""path"": ""<DualShockGamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""ControllerPS"",
+                    ""action"": ""NextOrPrevious"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -387,6 +473,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Game_West = m_Game.FindAction("West", throwIfNotFound: true);
         m_Game_East = m_Game.FindAction("East", throwIfNotFound: true);
         m_Game_Exit = m_Game.FindAction("Exit", throwIfNotFound: true);
+        m_Game_NextOrPrevious = m_Game.FindAction("NextOrPrevious", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -454,6 +541,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Game_West;
     private readonly InputAction m_Game_East;
     private readonly InputAction m_Game_Exit;
+    private readonly InputAction m_Game_NextOrPrevious;
     public struct GameActions
     {
         private @InputActions m_Wrapper;
@@ -464,6 +552,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public InputAction @West => m_Wrapper.m_Game_West;
         public InputAction @East => m_Wrapper.m_Game_East;
         public InputAction @Exit => m_Wrapper.m_Game_Exit;
+        public InputAction @NextOrPrevious => m_Wrapper.m_Game_NextOrPrevious;
         public InputActionMap Get() { return m_Wrapper.m_Game; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -491,6 +580,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Exit.started += instance.OnExit;
             @Exit.performed += instance.OnExit;
             @Exit.canceled += instance.OnExit;
+            @NextOrPrevious.started += instance.OnNextOrPrevious;
+            @NextOrPrevious.performed += instance.OnNextOrPrevious;
+            @NextOrPrevious.canceled += instance.OnNextOrPrevious;
         }
 
         private void UnregisterCallbacks(IGameActions instance)
@@ -513,6 +605,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @Exit.started -= instance.OnExit;
             @Exit.performed -= instance.OnExit;
             @Exit.canceled -= instance.OnExit;
+            @NextOrPrevious.started -= instance.OnNextOrPrevious;
+            @NextOrPrevious.performed -= instance.OnNextOrPrevious;
+            @NextOrPrevious.canceled -= instance.OnNextOrPrevious;
         }
 
         public void RemoveCallbacks(IGameActions instance)
@@ -565,5 +660,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         void OnWest(InputAction.CallbackContext context);
         void OnEast(InputAction.CallbackContext context);
         void OnExit(InputAction.CallbackContext context);
+        void OnNextOrPrevious(InputAction.CallbackContext context);
     }
 }

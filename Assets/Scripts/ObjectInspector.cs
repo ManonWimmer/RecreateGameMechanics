@@ -17,10 +17,19 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
 
     [SerializeField] GameObject _readBottomIcon;
     [SerializeField] GameObject _readPanel;
+    [SerializeField] GameObject _next;
+    [SerializeField] GameObject _previous;
     [SerializeField] TMP_Text _readTxt;
 
     private bool _canDrag;
     private bool _canRead;
+
+    private bool _canGoNext;
+    private bool _canGoPrevious;
+
+    private InteractableObject _object;
+
+    private int _currentInt = 0;
 
     private Transform _objectPrefab;
     // ----- FIELDS ----- //
@@ -47,6 +56,34 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
             ToggleReadPanel();
         }
 
+        if (_object.ObjectInspectorType == ObjectInspectorType.TwoDimension)
+        {
+            Vector2 nextOrPreviousDirection = InputManager.instance.GetNextOrPreviousDirection();
+
+            if (nextOrPreviousDirection != Vector2.zero && _object.ObjectSprites.Count > 1) // Multiple sprites
+            {
+                Debug.Log(nextOrPreviousDirection.x);
+                if (nextOrPreviousDirection.x == 1) // Next
+                {
+                    if (_canGoNext)
+                    {
+                        _currentInt++;
+                        _image2D.sprite = _object.ObjectSprites[_currentInt];
+                        CheckNextAndPrevious();
+                    }
+                }
+                else if (nextOrPreviousDirection.x == -1) // Previous
+                {
+                    if (_canGoPrevious)
+                    {
+                        _currentInt--;
+                        _image2D.sprite = _object.ObjectSprites[_currentInt];
+                        CheckNextAndPrevious();
+                    }
+                }
+            }
+        }
+        
         // For gamepad rotate if 3d
         if (_canDrag && InputManager.instance.GetDevice() != "Keyboard")
         {
@@ -67,10 +104,16 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
 
         HideReadPanel();
 
-        if (currentObject.ObjectReadText != "")
+        _object = currentObject;
+
+        _currentInt = 0;
+        _canGoNext = false;
+        _canGoPrevious = false;
+
+        if (currentObject.ObjectReadTexts.Count > 0)
         {
             _readBottomIcon.SetActive(true);
-            _readTxt.text = currentObject.ObjectReadText;
+            _readTxt.text = currentObject.ObjectReadTexts[_currentInt]; // _currentInt = 0
             _canRead = true;
         }
         else
@@ -96,8 +139,10 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
         {
             _rawImage3D.enabled = false;
             _image2D.enabled = true;
-            _image2D.sprite = currentObject.ObjectSprite;
+            _image2D.sprite = currentObject.ObjectSprites[_currentInt]; // _currentInt = 0
             _canDrag = false;
+
+            CheckNextAndPrevious();
         }
     }
 
@@ -141,5 +186,44 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
     public void ToggleReadPanel()
     {
         _readPanel.SetActive(!_readPanel.activeSelf);
+    }
+
+    private void CheckNextAndPrevious()
+    {
+        if (_object.ObjectSprites.Count > 1)
+        {
+            if (_currentInt == 0) // First
+            {
+                _next.SetActive(true);
+                _previous.SetActive(false);
+
+                _canGoNext = true;
+                _canGoPrevious = false;
+            }
+            else if (_currentInt == _object.ObjectSprites.Count - 1) // Last
+            {
+                _next.SetActive(false);
+                _previous.SetActive(true);
+
+                _canGoNext = false;
+                _canGoPrevious = true;
+            }
+            else // In between
+            {
+                _next.SetActive(true);
+                _previous.SetActive(true);
+
+                _canGoNext = true;
+                _canGoPrevious = true;
+            }
+        }
+        else
+        {
+            _next.SetActive(false);
+            _previous.SetActive(false);
+
+            _canGoNext = false;
+            _canGoPrevious = false;
+        }
     }
 }

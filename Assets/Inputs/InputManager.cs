@@ -7,11 +7,13 @@ public class InputManager : MonoBehaviour
 {
     // ----- FIELDS ----- //
     private Vector2 _moveDirection = Vector2.zero;
+    private Vector2 _nextOrPreviousDirection = Vector2.zero;
     private bool _northPressed = false;
     private bool _southPressed = false;
     private bool _westPressed = false;
     private bool _eastPressed = false;
     private bool _exitPressed = false;
+    private bool _nextOrPreviousPressed = false;
 
     [SerializeField]
     private PlayerInput playerInput;
@@ -95,6 +97,18 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    public void NextOrPreviousPressed(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _nextOrPreviousDirection = context.ReadValue<Vector2>();
+        }
+        else if (context.canceled)
+        {
+            _nextOrPreviousDirection = context.ReadValue<Vector2>();
+        }
+    }
+
     public Vector2 GetMoveDirection()
     {
         return _moveDirection;
@@ -130,6 +144,31 @@ public class InputManager : MonoBehaviour
         bool result = _exitPressed;
         _exitPressed = false;
         return result;
+    }
+
+    public Vector2 GetNextOrPreviousDirection()
+    {
+        Vector2 result = _nextOrPreviousDirection;
+        if (result.x == 0)
+        {
+            _nextOrPreviousPressed = false;
+        }
+        result.y = 0;
+
+        if (result.x > 0.5f  && !_nextOrPreviousPressed) // Right
+        {
+            Debug.Log("right");
+            _nextOrPreviousPressed = true;
+            return new Vector2(1, 0); // Right
+        }
+        else if (result.x < -0.5f && !_nextOrPreviousPressed) // Left
+        {
+            Debug.Log("left");
+            _nextOrPreviousPressed = true;
+            return new Vector2(-1, 0); // Left
+        }
+
+            return Vector2.zero;
     }
 
     private void UpdateDevice()

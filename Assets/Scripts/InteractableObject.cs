@@ -28,8 +28,8 @@ public class InteractableObject : MonoBehaviour
     [SerializeField] ObjectInspectorType _objectInspectorType;
 
     [SerializeField] Transform _prefab; // For 3D inspection
-    [SerializeField] Sprite _objectSprite; // For 2D inspection
-    [SerializeField] String _objectReadText; // Can be read ? string null or not
+    [SerializeField] List<Sprite> _objectSprites = new List<Sprite>(); // For 2D inspection
+    [SerializeField] List<string> _objectReadTexts = new List<string>(); // Can be read ? List for multiple sprites // CHANGER POUR PAIR STRING, INT SPRITE
 
     [SerializeField] ObjectCanvasUI _canvas;
 
@@ -40,8 +40,8 @@ public class InteractableObject : MonoBehaviour
 
     public List<ButtonData> ButtonsData { get => _buttonsData; set => _buttonsData = value; }
     public Transform Prefab { get => _prefab; set => _prefab = value; }
-    public Sprite ObjectSprite { get => _objectSprite; set => _objectSprite = value; }
-    public string ObjectReadText { get => _objectReadText; set => _objectReadText = value; }
+    public List<Sprite> ObjectSprites { get => _objectSprites; set => _objectSprites = value; }
+    public List<string> ObjectReadTexts { get => _objectReadTexts; set => _objectReadTexts = value; }
     public ObjectInspectorType ObjectInspectorType { get => _objectInspectorType; set => _objectInspectorType = value; }
 
     // ----- FIELDS ----- //
