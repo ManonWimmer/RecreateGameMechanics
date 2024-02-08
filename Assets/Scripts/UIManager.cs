@@ -33,15 +33,15 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (_isInMenu && !ObjectInspectorManager.instance.IsInObjectInspectorMenu)
+        if (_isInMenu && (!ObjectInspectorManager.instance.IsInObjectInspectorMenu && !DialogueManager.GetInstance().DialogueIsPlaying))
         {
             _isInMenu = false;
-            CursorManagerUI.instance.ShowCursorUI();
+            //CursorManagerUI.instance.ShowCursorUI();
         }
-        else if (!_isInMenu && ObjectInspectorManager.instance.IsInObjectInspectorMenu)
+        else if (!_isInMenu && (ObjectInspectorManager.instance.IsInObjectInspectorMenu || DialogueManager.GetInstance().DialogueIsPlaying))
         {
             _isInMenu = true;
-            CursorManagerUI.instance.HideCursorUI();
+            //CursorManagerUI.instance.HideCursorUI();
         }
     }
 }

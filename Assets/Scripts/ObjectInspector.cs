@@ -127,6 +127,9 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
             }
 
             _objectPrefab = Instantiate(prefab, new Vector3(1000, 1000, 1000), Quaternion.identity);
+
+            _next.SetActive(false);
+            _previous.SetActive(false);
         }
         else // 2D
         {
@@ -164,7 +167,6 @@ public class ObjectInspector : MonoBehaviour, IDragHandler
         GL.Clear(true, true, Color.clear);
 
         RenderTexture.active = rt;
-
     }
 
     public void ShowReadPanel()
