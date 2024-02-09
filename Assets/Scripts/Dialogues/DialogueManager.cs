@@ -5,6 +5,7 @@ using TMPro;
 using Ink.Runtime;
 using UnityEngine.EventSystems;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -54,6 +55,9 @@ public class DialogueManager : MonoBehaviour
 
     private DialogueVariables dialogueVariables;
     private InkExternalFunctions inkExternalFunctions;
+
+    private List<Choice> currentChoices = new List<Choice>();
+    private bool displayChoices = false;
 
     public bool DialogueIsPlaying { get => dialogueIsPlaying; set => dialogueIsPlaying = value; }
     // ----- FIELDS ----- //
@@ -129,17 +133,27 @@ public class DialogueManager : MonoBehaviour
         // return right away if dialogue isn't playing
         if (!dialogueIsPlaying)
         {
+            //Debug.Log("end");
             return;
+        }
+        else
+        {
+            // check choices
+            if (currentChoices.Count > 0 && !displayChoices)
+            {
+                CheckMakeChoice();
+            }
         }
 
         // handle continuing to the next line in the dialogue when submit is pressed
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
         if (canContinueToNextLine
-            && currentStory.currentChoices.Count == 0
             && InputManager.instance.GetSouthPressed())
         {
+            Debug.Log("ici");
             ContinueStory();
         }
+       
     }
 
     public void EnterDialogueMode(TextAsset inkJSON)
@@ -177,7 +191,8 @@ public class DialogueManager : MonoBehaviour
 
     public void ContinueStory()
     {
-        if (currentStory.canContinue)
+        Debug.Log("continue story");
+        if (currentStory.canContinue && !displayChoices)
         {
             // set text for the current dialogue line
             if (displayLineCoroutine != null)
@@ -201,7 +216,16 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(ExitDialogueMode());
+            if (!displayChoices)
+            {
+                //Debug.Log("exit");
+                StartCoroutine(ExitDialogueMode());
+            }
+            else
+            {
+                DisplayChoices();
+            }
+            
         }
     }
 
@@ -248,8 +272,8 @@ public class DialogueManager : MonoBehaviour
 
         // actions to take after the entire line has finished displaying
         continueIcon.SetActive(true);
-        DisplayChoices();
 
+        CheckDisplayChoices();
         canContinueToNextLine = true;
     }
 
@@ -357,32 +381,60 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private void CheckDisplayChoices()
+    {
+        Debug.Log("check display choices");
+
+        if (displayChoices)
+        {
+            DisplayChoices();
+        }
+        else
+        {
+            currentChoices = currentStory.currentChoices;
+            Debug.Log(currentChoices.Count);
+
+            if (currentChoices.Count > 0)
+            {
+                displayChoices = true;
+            }
+        }
+    }
+
     private void DisplayChoices()
     {
-        List<Choice> currentChoices = currentStory.currentChoices;
-
-        // defensive check to make sure our UI can support the number of choices coming in
-        if (currentChoices.Count > choices.Length)
+        Debug.Log("display choices");
+        if (displayChoices)
         {
-            Debug.LogError("More choices were given than the UI can support. Number of choices given: "
-                + currentChoices.Count);
-        }
+            //List<Choice> currentChoices = currentStory.currentChoices;
+            Debug.Log(currentChoices.Count);
 
-        int index = 0;
-        // enable and initialize the choices up to the amount of choices for this line of dialogue
-        foreach (Choice choice in currentChoices)
-        {
-            choices[index].gameObject.SetActive(true);
-            choicesText[index].text = choice.text;
-            index++;
-        }
-        // go through the remaining choices the UI supports and make sure they're hidden
-        for (int i = index; i < choices.Length; i++)
-        {
-            choices[i].gameObject.SetActive(false);
-        }
 
-        StartCoroutine(SelectFirstChoice());
+            // defensive check to make sure our UI can support the number of choices coming in
+            if (currentChoices.Count > choices.Length)
+            {
+                Debug.LogError("More choices were given than the UI can support. Number of choices given: "
+                    + currentChoices.Count);
+            }
+
+            int index = 0;
+            // enable and initialize the choices up to the amount of choices for this line of dialogue
+            foreach (Choice choice in currentChoices)
+            {
+                choices[index].gameObject.SetActive(true);
+                choicesText[index].text = choice.text;
+                index++;
+            }
+            // go through the remaining choices the UI supports and make sure they're hidden
+            for (int i = index; i < choices.Length; i++)
+            {
+                choices[i].gameObject.SetActive(false);
+            }
+
+            StartCoroutine(SelectFirstChoice());
+
+            displayChoices = false;
+        }  
     }
 
     private IEnumerator SelectFirstChoice()
@@ -394,14 +446,39 @@ public class DialogueManager : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
     }
 
-    public void MakeChoice(int choiceIndex)
+    public void CheckMakeChoice()
     {
+        Debug.Log("check make choice");
+        int choiceIndex = -1; 
+        
         if (canContinueToNextLine)
         {
-            currentStory.ChooseChoiceIndex(choiceIndex);
-            // NOTE: The below two lines were added to fix a bug after the Youtube video was made
-            InputManager.instance.GetSouthPressed(); // this is specific to my InputManager script
-            ContinueStory();
+            Debug.Log("can continue");
+            if (InputManager.instance.GetEastPressed() && currentChoices.Count >= 1)
+            {
+                choiceIndex = 0;
+            }
+            else if (InputManager.instance.GetWestPressed() && currentChoices.Count >= 2)
+            {
+                choiceIndex = 1;
+            }
+            else if (InputManager.instance.GetNorthPressed() && currentChoices.Count >= 3)
+            {
+                choiceIndex = 2;
+            }
+            else if (InputManager.instance.GetSouthPressed() && currentChoices.Count == 4)
+            {
+                choiceIndex = 3;
+            }
+
+            if (choiceIndex != -1)
+            {
+                Debug.Log("Make choice " + choiceIndex);
+                currentStory.ChooseChoiceIndex(choiceIndex);
+                // NOTE: The below two lines were added to fix a bug after the Youtube video was made
+                //InputManager.instance.GetSouthPressed(); // this is specific to my InputManager script
+                ContinueStory();
+            }     
         }
     }
 
