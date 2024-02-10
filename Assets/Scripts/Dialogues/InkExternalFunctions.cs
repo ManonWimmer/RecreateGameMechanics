@@ -9,18 +9,21 @@ public class InkExternalFunctions
 
     public void Bind(Story story)
     {
+        /*
         story.BindExternalFunction("startQuest", (int questId) => StartQuest(questId));
         story.BindExternalFunction("completeQuest", (int questId) => CompleteQuest(questId));
         story.BindExternalFunction("checkCanCompleteQuest", (int questId) => CheckCanCompleteQuest(questId));
-        
+        */
     }
         
 
     public void Unbind(Story story)
     {
+        /*
         story.UnbindExternalFunction("startQuest");
         story.UnbindExternalFunction("completeQuest");
         story.UnbindExternalFunction("checkCanCompleteQuest");
+        */
     }
 
     public void StartQuest(int questId)

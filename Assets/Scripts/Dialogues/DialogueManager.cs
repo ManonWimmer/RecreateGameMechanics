@@ -6,6 +6,7 @@ using Ink.Runtime;
 using UnityEngine.EventSystems;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -18,9 +19,9 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private GameObject continueIcon;
+    //[SerializeField] private GameObject continueIcon;
     [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private TextMeshProUGUI displayNameText;
+    //[SerializeField] private TextMeshProUGUI displayNameText;
     //[SerializeField] private Animator portraitAnimator;
     //private Animator layoutAnimator;
 
@@ -37,6 +38,7 @@ public class DialogueManager : MonoBehaviour
     private Dictionary<string, DialogueAudioInfoSO> audioInfoDictionary;
     private AudioSource audioSource;*/
 
+
     private Story currentStory;
     private bool dialogueIsPlaying;
 
@@ -50,14 +52,20 @@ public class DialogueManager : MonoBehaviour
     /*
     private const string PORTRAIT_TAG = "portrait";
     private const string LAYOUT_TAG = "layout";
-    private const string AUDIO_TAG = "audio";
     */
+    private const string AUDIO_TAG = "audio";
+
+    private AudioSource currentAudioSource;
+    private AudioClip currentAudioClip;
+
+
 
     private DialogueVariables dialogueVariables;
     private InkExternalFunctions inkExternalFunctions;
 
     private List<Choice> currentChoices = new List<Choice>();
     private bool displayChoices = false;
+    private bool waitingForChoice = false;
 
     public bool DialogueIsPlaying { get => dialogueIsPlaying; set => dialogueIsPlaying = value; }
     // ----- FIELDS ----- //
@@ -139,7 +147,7 @@ public class DialogueManager : MonoBehaviour
         else
         {
             // check choices
-            if (currentChoices.Count > 0 && !displayChoices)
+            if (currentChoices.Count > 0 && waitingForChoice)
             {
                 CheckMakeChoice();
             }
@@ -147,8 +155,8 @@ public class DialogueManager : MonoBehaviour
 
         // handle continuing to the next line in the dialogue when submit is pressed
         // NOTE: The 'currentStory.currentChoiecs.Count == 0' part was to fix a bug after the Youtube video was made
-        if (canContinueToNextLine
-            && InputManager.instance.GetSouthPressed())
+        if (canContinueToNextLine && !waitingForChoice
+            )
         {
             Debug.Log("ici");
             ContinueStory();
@@ -167,7 +175,7 @@ public class DialogueManager : MonoBehaviour
 
         // reset portrait, layout, and speaker
         
-        displayNameText.text = "???";
+        //displayNameText.text = "???";
         /*
         portraitAnimator.Play("default");
         layoutAnimator.Play("right");*/
@@ -216,6 +224,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
+            Debug.Log("else");
             if (!displayChoices)
             {
                 //Debug.Log("exit");
@@ -223,6 +232,7 @@ public class DialogueManager : MonoBehaviour
             }
             else
             {
+                Debug.Log("ici");
                 DisplayChoices();
             }
             
@@ -231,17 +241,25 @@ public class DialogueManager : MonoBehaviour
 
     private IEnumerator DisplayLine(string line)
     {
+        dialogueText.gameObject.SetActive(true);
+        //displayNameText.gameObject.SetActive(true);
+
+        currentAudioSource.PlayOneShot(currentAudioClip);
+
         // set the text to the full line, but set the visible characters to 0
         dialogueText.text = line;
-        dialogueText.maxVisibleCharacters = 0;
+
+        //dialogueText.maxVisibleCharacters = 0;
         // hide items while text is typing
-        continueIcon.SetActive(false);
+        //continueIcon.SetActive(false);
         HideChoices();
 
         canContinueToNextLine = false;
 
+        /*
         bool isAddingRichTextTag = false;
 
+        
         // display each letter one at a time
         foreach (char letter in line.ToCharArray())
         {
@@ -269,9 +287,13 @@ public class DialogueManager : MonoBehaviour
                 yield return new WaitForSeconds(typingSpeed);
             }
         }
+        */
 
         // actions to take after the entire line has finished displaying
-        continueIcon.SetActive(true);
+        //continueIcon.SetActive(true);
+
+        yield return new WaitUntil(() => !currentAudioSource.isPlaying);
+        yield return new WaitForSeconds(0.5f);
 
         CheckDisplayChoices();
         canContinueToNextLine = true;
@@ -361,7 +383,8 @@ public class DialogueManager : MonoBehaviour
             {
                 case SPEAKER_TAG:
                     Debug.Log(tagKey + tagValue);
-                    displayNameText.text = tagValue;
+                    //displayNameText.text = tagValue;
+                    SetCurrentAudioSource(tagValue);
                     break;
                 /*
                 case PORTRAIT_TAG:
@@ -370,15 +393,26 @@ public class DialogueManager : MonoBehaviour
                 case LAYOUT_TAG:
                     layoutAnimator.Play(tagValue);
                     break;
-                case AUDIO_TAG:
-                    SetCurrentAudioInfo(tagValue);
-                    break;
                 */
+                case AUDIO_TAG:
+                    SetCurrentAudioClip(tagValue);
+                    break;
+                
                 default:
                     Debug.LogWarning("Tag came in but is not currently being handled: " + tag);
                     break;
             }
         }
+    }
+
+    private void SetCurrentAudioClip(string name)
+    {
+        currentAudioClip = AudioManager.instance.GetAudioClip(name);
+    }
+
+    private void SetCurrentAudioSource(string name)
+    {
+        currentAudioSource = AudioManager.instance.GetAudioSource(name);
     }
 
     private void CheckDisplayChoices()
@@ -406,6 +440,11 @@ public class DialogueManager : MonoBehaviour
         Debug.Log("display choices");
         if (displayChoices)
         {
+            waitingForChoice = true;
+
+            dialogueText.gameObject.SetActive(false);
+            //displayNameText.gameObject.SetActive(false);
+
             //List<Choice> currentChoices = currentStory.currentChoices;
             Debug.Log(currentChoices.Count);
 
@@ -473,6 +512,7 @@ public class DialogueManager : MonoBehaviour
 
             if (choiceIndex != -1)
             {
+                waitingForChoice = false;
                 Debug.Log("Make choice " + choiceIndex);
                 currentStory.ChooseChoiceIndex(choiceIndex);
                 // NOTE: The below two lines were added to fix a bug after the Youtube video was made
