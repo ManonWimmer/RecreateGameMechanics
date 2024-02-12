@@ -14,7 +14,6 @@ public class AudioManager : MonoBehaviour
 
     private Dictionary<string, AudioClip> _dictAudioClips = new Dictionary<string, AudioClip>();
     // ----- FIELDS ----- //
-
     private void Awake()
     {
         instance = this;
@@ -38,7 +37,7 @@ public class AudioManager : MonoBehaviour
             if (clip != null)
             {
                 _dictAudioClips.Add(clip.name, clip);
-                Debug.Log("add " + clip.name);
+                //Debug.Log("add " + clip.name);
             }
             else
             {

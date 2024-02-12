@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -54,6 +55,11 @@ public class DialogueManager : MonoBehaviour
     private const string LAYOUT_TAG = "layout";
     */
     private const string AUDIO_TAG = "audio";
+
+    private const string DIALOGUE_TAG = "dialogue";
+    private Dialogues currentDialogue;
+
+    private const string CAMERA_TAG = "camera";
 
     private AudioSource currentAudioSource;
     private AudioClip currentAudioClip;
@@ -193,6 +199,8 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
         dialogueText.text = "";
 
+        DialogueCamerasManager.instance.BackToPlayerCamera();
+
         // go back to default audio
         //SetCurrentAudioInfo(defaultAudioInfo.id);
     }
@@ -299,62 +307,6 @@ public class DialogueManager : MonoBehaviour
         canContinueToNextLine = true;
     }
 
-    /*
-    private void PlayDialogueSound(int currentDisplayedCharacterCount, char currentCharacter)
-    {
-        // set variables for the below based on our config
-        AudioClip[] dialogueTypingSoundClips = currentAudioInfo.dialogueTypingSoundClips;
-        int frequencyLevel = currentAudioInfo.frequencyLevel;
-        float minPitch = currentAudioInfo.minPitch;
-        float maxPitch = currentAudioInfo.maxPitch;
-        bool stopAudioSource = currentAudioInfo.stopAudioSource;
-
-        // play the sound based on the config
-        if (currentDisplayedCharacterCount % frequencyLevel == 0)
-        {
-            if (stopAudioSource)
-            {
-                audioSource.Stop();
-            }
-            AudioClip soundClip = null;
-            // create predictable audio from hashing
-            if (makePredictable)
-            {
-                int hashCode = currentCharacter.GetHashCode();
-                // sound clip
-                int predictableIndex = hashCode % dialogueTypingSoundClips.Length;
-                soundClip = dialogueTypingSoundClips[predictableIndex];
-                // pitch
-                int minPitchInt = (int)(minPitch * 100);
-                int maxPitchInt = (int)(maxPitch * 100);
-                int pitchRangeInt = maxPitchInt - minPitchInt;
-                // cannot divide by 0, so if there is no range then skip the selection
-                if (pitchRangeInt != 0)
-                {
-                    int predictablePitchInt = (hashCode % pitchRangeInt) + minPitchInt;
-                    float predictablePitch = predictablePitchInt / 100f;
-                    audioSource.pitch = predictablePitch;
-                }
-                else
-                {
-                    audioSource.pitch = minPitch;
-                }
-            }
-            // otherwise, randomize the audio
-            else
-            {
-                // sound clip
-                int randomIndex = Random.Range(0, dialogueTypingSoundClips.Length);
-                soundClip = dialogueTypingSoundClips[randomIndex];
-                // pitch
-                audioSource.pitch = Random.Range(minPitch, maxPitch);
-            }
-
-            // play sound
-            audioSource.PlayOneShot(soundClip);
-        }
-    }*/
-
     private void HideChoices()
     {
         foreach (GameObject choiceButton in choices)
@@ -386,14 +338,12 @@ public class DialogueManager : MonoBehaviour
                     //displayNameText.text = tagValue;
                     SetCurrentAudioSource(tagValue);
                     break;
-                /*
-                case PORTRAIT_TAG:
-                    portraitAnimator.Play(tagValue);
+                case DIALOGUE_TAG:
+                    currentDialogue = (Dialogues)Enum.Parse(typeof(Dialogues), tagValue);
                     break;
-                case LAYOUT_TAG:
-                    layoutAnimator.Play(tagValue);
+                case CAMERA_TAG:
+                    DialogueCamerasManager.instance.ActivateCamera(currentDialogue, int.Parse(tagValue));
                     break;
-                */
                 case AUDIO_TAG:
                     SetCurrentAudioClip(tagValue);
                     break;

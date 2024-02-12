@@ -1,27 +1,33 @@
 INCLUDE globals.ink
 
+#dialogue:LightHouse01
 
 
--> test
+-> Beginning
 
-=== test ===
+=== Beginning ===
+#camera:0
 Sure you don't want to be alone ?  #speaker:Max #audio:Max_sure-you-dont-want-to-be-alone
+#camera:1
 Have a seat, Pete. #speaker:Chloe #audio:Chloe_have-a-seat-pete
 + [You're in a good mood.]
 Bla
 -> DONE
-
 + [My pleasure.]
 -> MyPleasure
 -> DONE
 
 
 === MyPleasure ===
+#camera:0
 My pleasure. Feels nice out here after all that drama... #speaker:Max #audio:Max_my-pleasure
 You really took one for Team Chloe. #speaker:Chloe #audio:Chloe_you-really-took-one-for-team-chloe
+#camera:5
 I'm not as brave as you. And David is indeed a "step-douche". #speaker:Max #audio:Max_im-not-as-brave-as-you
 I'm sorry you had to experience it firsthand. #speaker:Chloe #audio:Chloe_im-sorry-you-had-to-experience-it-firsthand
+#camera:3
 You have to live with him. Has he always been this way ? #speaker:Max #audio:Max_you-have-to-live-with-him
+#camera:1
 Ever since my desesperate mom dragged his ass to our home! ...I never trusted David. #speaker:Chloe #audio:Chloe_ever-since-my-desesperate-mom
 + [He freaked out on Kate.]
 -> HeFreakedOutOnKate
@@ -30,9 +36,12 @@ Ever since my desesperate mom dragged his ass to our home! ...I never trusted Da
 -> DONE
 
 === HeFreakedOutOnKate ===
+#camera:0
 He freaked out on poor Kate Marsh today. #speaker:Max #audio:Max_he-freaked-out-on-poor-kate-marsh-today
 I know her. She's cool. Only that prick would bully her. #speaker:Chloe #audio:Chloe_i-know-her-shes-cool
+#camera:3
 He has some kind of weird agenda. #speaker:Max #audio:Max_he-has-some-kind-of-weird-agenda
+#camera:1
 He has a lot of secret files. Rambo still thinks he's gathering enemy intelligence. #speaker:Chloe #audio:Chloe_he-has-a-lot-of-secret-files
 Did you take a peek ? #speaker:Chloe #audio:Chloe_did-you-take-a-peek
 + [I wanted to.]
@@ -42,16 +51,26 @@ Did you take a peek ? #speaker:Chloe #audio:Chloe_did-you-take-a-peek
 -> DONE
 
 === IWantedTo === 
+#camera:3
 You know I wanted to, but... I realized I have enough mystery in my life. #speaker:Max #audio:Max_you-know-i-wanted-to
+#camera:1
 I'd like to find out. I bet he's got some serious porn in there. #speaker:Chloe #audio:Chloe_id-like-to-find-out
+#camera:4
 Ew. #speaker:Max #audio:Max_ew
 Good thing you didn't look. #speaker:Chloe #audio:Chloe_good-thing-you-didnt-look
+#camera:1
 He has a total surveillance fetish. I worry there are spy cams in the house. #speaker:Chloe #audio:Chloe_he-has-a-total-surveillance-fetish
+#camera:0
 I knew you didn't know! Chloe, your house is under surveillance. #speaker:Max #audio:Max_i-knew-you-didnt-know
+#camera:1
 What are you talking about ? #speaker: Chloe #audio:Chloe_what-are-you-talking-about
+#camera:3
 There are cameras all over the house. I saw it on a monitor in the garage. #speaker:Max #audio:Max_there-are-cameras-all-over-the-house
+#camera:2
 I knew it! He is so hella fucking paranoid. I'll keep this a secret for now... #speaker:Chloe #audio:Chloe_i-knew-it-hes-so-hella-fucking-paranoid
+#camera:0
 Sometimes ignorance is bliss. #speaker:Max #audio:Max_sometimes-ignorance-is-bliss
+#camera:1
 No wonder I'm so miserable. Everybody in this town knows everybody's secrets... #speaker:Chloe #audio:Chloe_no-wonder-im-so-miserable
 + [What's Nathan's secret ?]
 -> WhatsNathansSecret
@@ -60,6 +79,7 @@ No wonder I'm so miserable. Everybody in this town knows everybody's secrets... 
 -> DONE
 
 === WhatsNathansSecret ===
+#camera:3
 What's Nathan's secret ? #speaker:Max #audio:Max_whats-nathans-secret
 He's an elite asshole who sells bad shit cut with laxative... #speaker:Chloe #audio:Chloe_hes-an-elite-asshole1
 and he dosed me with some drug in his room. #speaker:Chloe #audio:Chloe_hes-an-elite-asshole2
