@@ -8,18 +8,30 @@ using static InteractableObject;
 public class Player : MonoBehaviour
 {
     // ----- FIELDS -----//
+    public static Player instance;
+
     [SerializeField] LayerMask _interactableLayer;
     [SerializeField] float _sphereRaycastRadius = 0.5f;
+
+    [SerializeField] Camera _playerCamera;
     private InteractableObject _currentObjectOutlined;
     private bool _isOutlined = false;
+
+    public Camera PlayerCamera { get => _playerCamera; set => _playerCamera = value; }
+
     // ----- FIELDS -----//
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Update()
     {
         //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //-> Not working with gamepad
 
         //Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f)); // Center of the screen
-        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
+        Ray ray = _playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0f));
         RaycastHit hit;
 
         //if (Physics.Raycast(ray, out hit, Mathf.Infinity, _interactableLayer) && !UIManager.instance.IsInMenu)
@@ -58,7 +70,9 @@ public class Player : MonoBehaviour
                             {
                                 case Button.North:
                                     if (InputManager.instance.GetNorthPressed())
-                                    { 
+                                    {
+                                        Debug.Log(_currentObjectOutlined.name);
+                                        Debug.Log(_currentObjectOutlined.ObjectInspectorType);
                                         if (_currentObjectOutlined.ObjectInspectorType != ObjectInspectorType.TargetCamera)
                                         {
                                             ObjectInspector.instance.InspectObject(_currentObjectOutlined.Prefab, _currentObjectOutlined); // 2D or 3D

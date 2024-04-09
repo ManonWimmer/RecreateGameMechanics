@@ -63,7 +63,7 @@ public class ObjectCanvasUI : MonoBehaviour
         // Turn object name and arrow towards camera :
         if (_canvas)
         {
-            _canvas.transform.LookAt(Camera.main.transform);
+            _canvas.transform.LookAt(Player.instance.PlayerCamera.transform);
         }
 
         // Don't rotate x
