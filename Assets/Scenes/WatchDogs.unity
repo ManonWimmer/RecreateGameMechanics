@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d13049dd94b7394ba57a065d8a27b89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _receiver: 0
 --- !u!1 &426788186
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,6 +637,7 @@ MonoBehaviour:
   _left: {fileID: 321725597}
   _top: {fileID: 707507376}
   _bottom: {fileID: 674933711}
+  _receiver: {fileID: 2100000, guid: 6b38742730e330c488cc8d7964788813, type: 2}
   _connected: {fileID: 2100000, guid: 663834164c6a04740aaa1b778249ce7e, type: 2}
   _disconnected: {fileID: 2100000, guid: a4b62a69d54e80347bd546999c6d4b9e, type: 2}
 --- !u!4 &507794153
@@ -882,6 +884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d13049dd94b7394ba57a065d8a27b89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _receiver: 0
 --- !u!1 &707507371
 GameObject:
   m_ObjectHideFlags: 0
@@ -1000,6 +1003,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d13049dd94b7394ba57a065d8a27b89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _receiver: 0
 --- !u!1 &801281913
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,6 +1122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d13049dd94b7394ba57a065d8a27b89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _receiver: 0
 --- !u!1 &1333260942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1285,7 +1290,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: cba66c276aed0874091de1c33eb3950d, type: 2}
+  - {fileID: 2100000, guid: 981abf7a53e6a964fba6bc48555ec31a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1325,7 +1330,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 507794153}
@@ -1342,6 +1347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d13049dd94b7394ba57a065d8a27b89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _receiver: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

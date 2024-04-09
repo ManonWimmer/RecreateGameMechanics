@@ -18,6 +18,7 @@ public class Node : MonoBehaviour
     [SerializeField] NodePoint _bottom;
 
     [Header("Materials")]
+    [SerializeField] Material _receiver;
     [SerializeField] Material _connected;
     [SerializeField] Material _disconnected;
 
@@ -53,6 +54,8 @@ public class Node : MonoBehaviour
         _lineRenderer.ResetBounds();
         _lineRenderer.positionCount = 0;
 
+        _nodeConnected = false;
+
         foreach (NodePoint point in _allPoints)
         {
             if (point.gameObject.activeSelf)
@@ -62,14 +65,44 @@ public class Node : MonoBehaviour
                 _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, new Vector3(point.transform.position.x, point.transform.position.y, -.05f));
                 _lineRenderer.positionCount++;
                 _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, new Vector3(_center.transform.position.x, _center.transform.position.y, -0.05f));
+
+                if (point.Receiver)
+                {
+                    _nodeConnected = true;
+                    point.GetComponent<MeshRenderer>().material = _receiver;
+                }
             }
         }
 
         if (_nodeConnected)
-            _lineRenderer.material = _connected;
+            ConnectAllNodePoints();
         else
-            _lineRenderer.material = _disconnected;
+            DisconnectAllNodePoints();
     }
+
+    private void ConnectAllNodePoints()
+    {
+        foreach (NodePoint point in _allPoints)
+        {
+            point.Connected = true;
+            if (!point.Receiver)
+                point.GetComponent<MeshRenderer>().material = _connected;
+        }
+
+        _lineRenderer.material = _connected;
+    }
+
+    private void DisconnectAllNodePoints()
+    {
+        foreach (NodePoint point in _allPoints)
+        {
+            point.Connected = false;
+            point.GetComponent<MeshRenderer>().material = _disconnected;
+        }
+
+        _lineRenderer.material = _disconnected;
+    }
+
 
     [Button]
     public void ToggleRight()
