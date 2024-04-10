@@ -274,22 +274,22 @@ public class Node : MonoBehaviour
 
         Debug.Log(point.Giver.Side + " " + point.Giver.Node.name + " " + point.Side);
 
-        if (point.Giver.Side == Side.Left && _rightNode == point.Giver.Node && point.Side == Side.Right)
+        if (point.Giver.Side == Side.Left && _rightNode == point.Giver.Node && point.Side == Side.Right && point.Giver.Connected)
         {
             Debug.Log("ici");
             point.Connected = true;
         } 
-        else if (point.Giver.Side == Side.Right && _leftNode == point.Giver.Node && point.Side == Side.Left)
+        else if (point.Giver.Side == Side.Right && _leftNode == point.Giver.Node && point.Side == Side.Left && point.Giver.Connected)
         {
             Debug.Log("ici a");
             point.Connected = true;
         }
-        else if (point.Giver.Side == Side.Bottom && _topNode == point.Giver.Node && point.Side == Side.Top)
+        else if (point.Giver.Side == Side.Bottom && _topNode == point.Giver.Node && point.Side == Side.Top && point.Giver.Connected)
         {
             Debug.Log("ici aa");
             point.Connected = true;
         }
-        else if (point.Giver.Side == Side.Top && _bottomNode == point.Giver.Node && point.Side == Side.Bottom)
+        else if (point.Giver.Side == Side.Top && _bottomNode == point.Giver.Node && point.Side == Side.Bottom && point.Giver.Connected)
         {
             Debug.Log("ici aaa");
             point.Connected = true;

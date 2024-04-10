@@ -146,6 +146,11 @@ PrefabInstance:
       propertyPath: _receiver
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3555504119212201195, guid: 54228a49b249cb741a39af044622feb4,
+        type: 3}
+      propertyPath: _canTurn
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4801919826381219947, guid: 54228a49b249cb741a39af044622feb4,
         type: 3}
       propertyPath: _receiver
