@@ -23,6 +23,8 @@ public class Node : MonoBehaviour
     private Material _connected;
     private Material _disconnected;
 
+    [SerializeField] bool _canTurn = true;
+
     private Node _rightNode;
     private Node _leftNode;
     private Node _topNode;
@@ -57,6 +59,11 @@ public class Node : MonoBehaviour
         _allPoints.Add(_left); 
         _allPoints.Add(_top); 
         _allPoints.Add(_bottom);
+
+        foreach(NodePoint point in _allPoints)
+        {
+            point.Node = this;
+        }
 
         _layerNode = NodesManager.instance.NodeLayer;
 
@@ -146,8 +153,13 @@ public class Node : MonoBehaviour
 
                 if (point.Receiver)
                 {
-                    _nodeConnected = true;
-                    point.GetComponent<MeshRenderer>().material = _receiver;
+                    CheckIfGiverConnected(point);
+
+                    if (point.Connected)
+                    {
+                        _nodeConnected = true;
+                        point.GetComponent<MeshRenderer>().material = _receiver;
+                    }
                 }
             }
         }
@@ -156,14 +168,6 @@ public class Node : MonoBehaviour
             ConnectAllNodePoints();
         else
             DisconnectAllNodePoints();
-
-        if (!_isRotating)
-        {
-            foreach (NodePoint point in _allPoints)
-            {
-                //CheckIfConnected(point);
-            }
-        }
             
     }
 
@@ -179,9 +183,11 @@ public class Node : MonoBehaviour
 
                     Debug.Log("a");
 
-                    _leftNode.Right.Receiver = true;
                     if (_leftNode.Right.gameObject.activeSelf)
-                    {  
+                    {
+                        _leftNode.Right.Receiver = true;
+                        _leftNode.Right.Giver = connectedPoint;
+                        _leftNode.Right.Connected = true;
                         _leftNode.NodeConnected = true;
                     }
                 }  
@@ -193,10 +199,12 @@ public class Node : MonoBehaviour
                         break;
 
                     Debug.Log("aa");
-                    _rightNode.Left.Receiver = true;
-
+                    
                     if (_rightNode.Left.gameObject.activeSelf)
                     {
+                        _rightNode.Left.Receiver = true;
+                        _rightNode.Left.Giver = connectedPoint;
+                        _rightNode.Left.Connected = true;
                         _rightNode.NodeConnected = true;
                     }    
                 }
@@ -208,10 +216,12 @@ public class Node : MonoBehaviour
                         break;
 
                     Debug.Log("aaa");
-                    _topNode.Bottom.Receiver = true;
-
+                    
                     if (_topNode.Bottom.gameObject.activeSelf)
                     {
+                        _topNode.Bottom.Receiver = true;
+                        _topNode.Bottom.Giver = connectedPoint;
+                        _topNode.Bottom.Connected = true;
                         _topNode.NodeConnected = true;
                     }   
                 }
@@ -223,10 +233,12 @@ public class Node : MonoBehaviour
                         break;
 
                     Debug.Log("aaaa");
-                    _bottomNode.Top.Receiver = true;
-
+                    
                     if (_bottomNode.Top.gameObject.activeSelf)
                     {
+                        _bottomNode.Top.Receiver = true;
+                        _bottomNode.Top.Giver = connectedPoint;
+                        _bottomNode.Top.Connected = true;
                         _bottomNode.NodeConnected = true;
                     }
                 }
@@ -254,86 +266,38 @@ public class Node : MonoBehaviour
         _lineRenderer.material = _connected;
     }
 
-    private void CheckIfConnected(NodePoint point)
+    private void CheckIfGiverConnected(NodePoint point)
     {
-        switch (point.Side)
+        Debug.Log("check giver " + point.name);
+        if (point.Giver == null)
+            return;
+
+        Debug.Log(point.Giver.Side + " " + point.Giver.Node.name + " " + point.Side);
+
+        if (point.Giver.Side == Side.Left && _rightNode == point.Giver.Node && point.Side == Side.Right)
         {
-            case (Side.Left):
-                if (_leftNode != null)
-                {
-                    Debug.Log("a");
-
-                    if (_leftNode.Right.gameObject.activeSelf && _leftNode.Top.Connected)
-                    {
-                        point.Connected = true;
-                    }
-                    else
-                    {
-                        point.Connected = false;
-                    }
-                }
-                else
-                {
-                    point.Connected = false;
-                }
-                break;
-            case (Side.Right):
-                if (_rightNode != null)
-                {
-                    Debug.Log("aa");
-
-                    if (_rightNode.Left.gameObject.activeSelf && _rightNode.Top.Connected)
-                    {
-                        point.Connected = true;
-                    }
-                    else
-                    {
-                        point.Connected = false;
-                    }
-                }
-                else
-                {
-                    point.Connected = false;
-                }
-                break;
-            case (Side.Top):
-                if (_topNode != null)
-                {
-                    Debug.Log("aaa");
-
-                    if (_topNode.Bottom.gameObject.activeSelf && _topNode.Top.Connected)
-                    {
-                        point.Connected = true;
-                    }
-                    else
-                    {
-                        point.Connected = false;
-                    }
-                }
-                else
-                {
-                    point.Connected = false;
-                }
-                break;
-            case (Side.Bottom):
-                if (_bottomNode != null)
-                {
-                    Debug.Log("aaaa");
-
-                    if (_bottomNode.Top.gameObject.activeSelf && _bottomNode.Top.Connected)
-                    {
-                        point.Connected = true;
-                    }
-                    else
-                    {
-                        point.Connected = false;
-                    }
-                }
-                else
-                {
-                    point.Connected = false;
-                }
-                break;
+            Debug.Log("ici");
+            point.Connected = true;
+        } 
+        else if (point.Giver.Side == Side.Right && _leftNode == point.Giver.Node && point.Side == Side.Left)
+        {
+            Debug.Log("ici a");
+            point.Connected = true;
+        }
+        else if (point.Giver.Side == Side.Bottom && _topNode == point.Giver.Node && point.Side == Side.Top)
+        {
+            Debug.Log("ici aa");
+            point.Connected = true;
+        }
+        else if (point.Giver.Side == Side.Top && _bottomNode == point.Giver.Node && point.Side == Side.Bottom)
+        {
+            Debug.Log("ici aaa");
+            point.Connected = true;
+        }
+        else
+        {
+            Debug.Log("disconnect");
+            DisconnectPoint(point);
         }
     }
 
@@ -341,11 +305,16 @@ public class Node : MonoBehaviour
     {
         foreach (NodePoint point in _allPoints)
         {
-            point.Connected = false;
-            point.GetComponent<MeshRenderer>().material = _disconnected;
+            DisconnectPoint(point);
         }
 
         _lineRenderer.material = _disconnected;
+    }
+
+    private void DisconnectPoint(NodePoint point)
+    {
+        point.Connected = false;
+        point.GetComponent<MeshRenderer>().material = _disconnected;
     }
 
     #region Toggle Sides
@@ -383,7 +352,7 @@ public class Node : MonoBehaviour
     [Button]
     public void RotateRightInGame()
     {
-        if (!_isRotating)
+        if (!_isRotating && _canTurn)
         {
             StartCoroutine(RotateCoroutine(-90, true));
         }
@@ -392,7 +361,7 @@ public class Node : MonoBehaviour
     [Button]
     public void RotateLeftInGame()
     {
-        if (!_isRotating)
+        if (!_isRotating && _canTurn)
         {
             StartCoroutine(RotateCoroutine(90, false));
         }
@@ -400,10 +369,8 @@ public class Node : MonoBehaviour
 
     IEnumerator RotateCoroutine(float degrees, bool right)
     {
-        // Calculate the target rotation by adding a 90 degree rotation to the current rotation
         Quaternion targetRotation = transform.rotation * Quaternion.Euler(0f, 0f, degrees);
 
-        // Rotate smoothly towards the target rotation
         while (Quaternion.Angle(transform.rotation, targetRotation) > 1f)
         {
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, NodesManager.instance.RotationSpeed * Time.deltaTime);
@@ -424,54 +391,112 @@ public class Node : MonoBehaviour
         NodePoint tempTop = _top;
         NodePoint tempBottom = _bottom;
 
-        bool rightReceiver = false;
-        bool leftReceiver = false;
-        bool topReceiver = false;
-        bool bottomReceiver = false;
+        bool rightReceiver = tempRight.Receiver;
+        bool leftReceiver = tempLeft.Receiver;
+        bool topReceiver = tempTop.Receiver;
+        bool bottomReceiver = tempBottom.Receiver;
 
-        rightReceiver = tempRight.Receiver;
-        leftReceiver = tempLeft.Receiver;
-        topReceiver = tempTop.Receiver;
-        bottomReceiver = tempBottom.Receiver;
+        Debug.Log("right receiver : " + rightReceiver);
+
+        NodePoint rightGiver = tempRight.Giver;
+        NodePoint leftGiver = tempLeft.Giver;
+        NodePoint topGiver = tempTop.Giver;
+        NodePoint bottomGiver = tempBottom.Giver;
 
         if (right)
         {
+            _bottom.Side = Side.Left;
+            _left.Side = Side.Top;
+            _right.Side = Side.Bottom;
+            _top.Side = Side.Right;
+
+            
+
             if (rightReceiver)
             {
                 _right.Receiver = false;
+                _right.Giver = null;
                 _top.Receiver = true;
+                _top.Giver = rightGiver;
             }
-            
-            _right = tempTop;
-            _top.Side = Side.Bottom;
 
             if (bottomReceiver)
             {
                 _bottom.Receiver = false;
+                _bottom.Giver = null;
                 _right.Receiver = true;
-            }
+                _right.Giver = bottomGiver;
 
-            _bottom = tempRight;
-            _right.Side = Side.Left;
+            }
 
             if (leftReceiver)
             {
                 _left.Receiver = false;
+                _left.Giver = null;
                 _bottom.Receiver = true;
+                _bottom.Giver = leftGiver;
             }
-
-            _left = tempBottom;
-            _bottom.Side = Side.Top;
 
             if (topReceiver)
             {
                 _top.Receiver = false;
+                _top.Giver = null;
                 _left.Receiver = true;
+                _left.Giver = topGiver;
             }
 
+            _right = tempTop;
+            _bottom = tempRight;
+            _left = tempBottom;
             _top = tempLeft;
-            _left.Side = Side.Right;
         }
-        // TO DO : ELSE
+        else
+        {
+            _bottom.Side = Side.Right;
+            _left.Side = Side.Bottom;
+            _right.Side = Side.Top;
+            _top.Side = Side.Left;
+
+            if (rightReceiver)
+            {
+                _right.Receiver = false;
+                _right.Giver = null;
+                _bottom.Receiver = true;
+                _bottom.Giver = rightGiver;
+            }
+
+            _right = tempBottom;
+
+            if (bottomReceiver)
+            {
+                _bottom.Receiver = false;
+                _bottom.Giver = null;
+                _left.Receiver = true;
+                _left.Giver = bottomGiver;
+
+            }
+
+            _bottom = tempLeft;
+
+            if (leftReceiver)
+            {
+                _left.Receiver = false;
+                _left.Giver = null;
+                _top.Receiver = true;
+                _top.Giver = leftGiver;
+            }
+
+            _left = tempTop;
+
+            if (topReceiver)
+            {
+                _top.Receiver = false;
+                _top.Giver = null;
+                _right.Receiver = true;
+                _right.Giver = topGiver;
+            }
+
+            _top = tempRight;
+        }
     }
 }
