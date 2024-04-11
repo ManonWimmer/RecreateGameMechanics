@@ -21,6 +21,9 @@ public class Node : MonoBehaviour
     private Material _receiver;
     private Material _connected;
     private Material _disconnected;
+    private Material _finished;
+
+    [SerializeField] MeshRenderer _backgroundGoal;
 
     [SerializeField] bool _canTurn = true;
 
@@ -32,12 +35,14 @@ public class Node : MonoBehaviour
     private List<NodePoint> _allPoints = new List<NodePoint>();
     private List<NodePoint> _activePoints = new List<NodePoint>();
 
-    private bool _nodeConnected = false;
+    [SerializeField] bool _nodeConnected = false; // sf for debug
 
     private float _raycastDistance;
     private LayerMask _layerNode;
 
     private bool _isRotating;
+
+    [SerializeField] bool _isGoal = false;
 
     private Outline _outline;
     public NodePoint Right { get => _right; set => _right = value; }
@@ -64,6 +69,7 @@ public class Node : MonoBehaviour
         _receiver = NodesManager.instance.Receiver;
         _connected = NodesManager.instance.Connected;
         _disconnected = NodesManager.instance.Disconnected;
+        _finished = NodesManager.instance.Finished;
 
         _allPoints.Add(_right); 
         _allPoints.Add(_left); 
@@ -144,7 +150,12 @@ public class Node : MonoBehaviour
 
     private void Update()
     {
-        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * _raycastDistance, Color.yellow);
+        if (NodesManager.instance.Completed)
+        {
+            _lineRenderer.material = _finished;
+            _backgroundGoal.material = _connected;
+            return;
+        }
 
         _lineRenderer.ResetBounds();
         _lineRenderer.positionCount = 0;
@@ -355,8 +366,8 @@ public class Node : MonoBehaviour
 
     [Button]
     public void RotateRightInGame()
-    {
-        if (!_isRotating && _canTurn)
+    { 
+        if (!_isRotating && _canTurn && !NodesManager.instance.Completed)
         {
             StartCoroutine(RotateCoroutine(-90));
         }
