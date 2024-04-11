@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
 using System.Linq;
-using System.Drawing;
 
 public class Node : MonoBehaviour
 {
@@ -40,6 +39,7 @@ public class Node : MonoBehaviour
 
     private bool _isRotating;
 
+    private Outline _outline;
     public NodePoint Right { get => _right; set => _right = value; }
     public NodePoint Left { get => _left; set => _left = value; }
     public NodePoint Top { get => _top; set => _top = value; }
@@ -51,6 +51,16 @@ public class Node : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // ----- Init Outline ----- //
+        _outline = gameObject.AddComponent<Outline>();
+
+        _outline.OutlineMode = Outline.Mode.OutlineAll;
+        _outline.OutlineColor = Color.white;
+        _outline.OutlineWidth = 5f;
+
+        DisableOutline();
+        // ----- Init Outline ----- //
+
         _receiver = NodesManager.instance.Receiver;
         _connected = NodesManager.instance.Connected;
         _disconnected = NodesManager.instance.Disconnected;
@@ -167,8 +177,7 @@ public class Node : MonoBehaviour
         if (_nodeConnected)
             ConnectAllNodePoints();
         else
-            DisconnectAllNodePoints();
-            
+            DisconnectAllNodePoints();    
     }
 
     private void ConnectToSurroundingNode(NodePoint connectedPoint)
@@ -276,27 +285,22 @@ public class Node : MonoBehaviour
 
         if (point.Giver.Side == Side.Left && _rightNode == point.Giver.Node && point.Side == Side.Right && point.Giver.Connected)
         {
-            Debug.Log("ici");
             point.Connected = true;
         } 
         else if (point.Giver.Side == Side.Right && _leftNode == point.Giver.Node && point.Side == Side.Left && point.Giver.Connected)
         {
-            Debug.Log("ici a");
             point.Connected = true;
         }
         else if (point.Giver.Side == Side.Bottom && _topNode == point.Giver.Node && point.Side == Side.Top && point.Giver.Connected)
         {
-            Debug.Log("ici aa");
             point.Connected = true;
         }
         else if (point.Giver.Side == Side.Top && _bottomNode == point.Giver.Node && point.Side == Side.Bottom && point.Giver.Connected)
         {
-            Debug.Log("ici aaa");
             point.Connected = true;
         }
         else
         {
-            Debug.Log("disconnect");
             DisconnectPoint(point);
         }
     }
@@ -354,21 +358,14 @@ public class Node : MonoBehaviour
     {
         if (!_isRotating && _canTurn)
         {
-            StartCoroutine(RotateCoroutine(-90, true));
+            StartCoroutine(RotateCoroutine(-90));
         }
     }
 
-    [Button]
-    public void RotateLeftInGame()
+    IEnumerator RotateCoroutine(float degrees)
     {
-        if (!_isRotating && _canTurn)
-        {
-            StartCoroutine(RotateCoroutine(90, false));
-        }
-    }
+        _isRotating = true;
 
-    IEnumerator RotateCoroutine(float degrees, bool right)
-    {
         Quaternion targetRotation = transform.rotation * Quaternion.Euler(0f, 0f, degrees);
 
         while (Quaternion.Angle(transform.rotation, targetRotation) > 1f)
@@ -381,10 +378,10 @@ public class Node : MonoBehaviour
 
         _isRotating = false;
 
-        RotateConnectedNodes(right);
+        RotateConnectedNodes();
     }
 
-    private void RotateConnectedNodes(bool right)
+    private void RotateConnectedNodes()
     {
         NodePoint tempRight = _right;
         NodePoint tempLeft = _left;
@@ -403,100 +400,58 @@ public class Node : MonoBehaviour
         NodePoint topGiver = tempTop.Giver;
         NodePoint bottomGiver = tempBottom.Giver;
 
-        if (right)
+        _bottom.Side = Side.Left;
+        _left.Side = Side.Top;
+        _right.Side = Side.Bottom;
+        _top.Side = Side.Right;
+
+        if (rightReceiver)
         {
-            _bottom.Side = Side.Left;
-            _left.Side = Side.Top;
-            _right.Side = Side.Bottom;
-            _top.Side = Side.Right;
-
-            
-
-            if (rightReceiver)
-            {
-                _right.Receiver = false;
-                _right.Giver = null;
-                _top.Receiver = true;
-                _top.Giver = rightGiver;
-            }
-
-            if (bottomReceiver)
-            {
-                _bottom.Receiver = false;
-                _bottom.Giver = null;
-                _right.Receiver = true;
-                _right.Giver = bottomGiver;
-
-            }
-
-            if (leftReceiver)
-            {
-                _left.Receiver = false;
-                _left.Giver = null;
-                _bottom.Receiver = true;
-                _bottom.Giver = leftGiver;
-            }
-
-            if (topReceiver)
-            {
-                _top.Receiver = false;
-                _top.Giver = null;
-                _left.Receiver = true;
-                _left.Giver = topGiver;
-            }
-
-            _right = tempTop;
-            _bottom = tempRight;
-            _left = tempBottom;
-            _top = tempLeft;
+            _right.Receiver = false;
+            _right.Giver = null;
+            _top.Receiver = true;
+            _top.Giver = rightGiver;
         }
-        else
+
+        if (bottomReceiver)
         {
-            _bottom.Side = Side.Right;
-            _left.Side = Side.Bottom;
-            _right.Side = Side.Top;
-            _top.Side = Side.Left;
-
-            if (rightReceiver)
-            {
-                _right.Receiver = false;
-                _right.Giver = null;
-                _bottom.Receiver = true;
-                _bottom.Giver = rightGiver;
-            }
-
-            _right = tempBottom;
-
-            if (bottomReceiver)
-            {
-                _bottom.Receiver = false;
-                _bottom.Giver = null;
-                _left.Receiver = true;
-                _left.Giver = bottomGiver;
-
-            }
-
-            _bottom = tempLeft;
-
-            if (leftReceiver)
-            {
-                _left.Receiver = false;
-                _left.Giver = null;
-                _top.Receiver = true;
-                _top.Giver = leftGiver;
-            }
-
-            _left = tempTop;
-
-            if (topReceiver)
-            {
-                _top.Receiver = false;
-                _top.Giver = null;
-                _right.Receiver = true;
-                _right.Giver = topGiver;
-            }
-
-            _top = tempRight;
+            _bottom.Receiver = false;
+            _bottom.Giver = null;
+            _right.Receiver = true;
+            _right.Giver = bottomGiver;
         }
+
+        if (leftReceiver)
+        {
+            _left.Receiver = false;
+            _left.Giver = null;
+            _bottom.Receiver = true;
+            _bottom.Giver = leftGiver;
+        }
+
+        if (topReceiver)
+        {
+            _top.Receiver = false;
+            _top.Giver = null;
+            _left.Receiver = true;
+            _left.Giver = topGiver;
+        }
+
+        _right = tempTop;
+        _bottom = tempRight;
+        _left = tempBottom;
+        _top = tempLeft;
     }
+
+    // ----- Enable / Disable Outline ----- //
+    public void EnableOutline()
+    {
+        _outline.enabled = true;
+    }
+
+    public void DisableOutline()
+    {
+        _outline.enabled = false;
+    }
+    // ----- Enable / Disable Outline ----- //
 }

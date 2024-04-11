@@ -65,7 +65,7 @@ public class ThirdPersonController : MonoBehaviour
         // Calculate Movement Direction
         _moveDirection = _orientation.forward * _verticalInput + _orientation.right * _horizontalInput;
 
-        if (UIManager.instance.IsInMenu)
+        if (UIManager.instance != null)
         {
             _moveDirection = Vector3.zero;
         }
