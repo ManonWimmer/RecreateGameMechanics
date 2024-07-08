@@ -1,0 +1,3 @@
+[LOG]: [FFmpegLib]: DEST URL: C:\Users\manon\Documents/RecreateGameMechanics/2024-07-08-15-23-50-BIIIU.mp4
+[LOG]: [FFmpegLib]: Build command: "C:/Users/manon/Documents/Github/RecreateGameMechanics/Assets/StreamingAssets/RockVR/FFmpeg/Windows/ffmpeg.exe" -f rawvideo -pix_fmt rgb24 -r 18 -s 720x480 -i - -y -preset ultrafast -pix_fmt yuv420p -vcodec libx264 -crf 18 -vf vflip -framerate 18 -tune zerolatency "C:\Users\manon\Documents/RecreateGameMechanics/2024-07-08-15-23-50-BIIIU.mp4"
+[LOG]: [FFmpegLib]: Write data bytes: 1036800
